@@ -1,0 +1,82 @@
+export type ActivityType =
+  | 'sight'
+  | 'food'
+  | 'shop'
+  | 'nature'
+  | 'culture'
+  | 'transit'
+  | 'free';
+
+export const TYPES: Record<ActivityType, { label: string; color: string }> = {
+  sight: { label: 'Sight', color: '#C0632D' },
+  food: { label: 'Food', color: '#B23A2E' },
+  shop: { label: 'Shop', color: '#8A6D2F' },
+  nature: { label: 'Nature', color: '#3E7A4E' },
+  culture: { label: 'Culture', color: '#6E3A55' },
+  transit: { label: 'Transit', color: '#3a3a3a' },
+  free: { label: 'Free', color: '#5a7a8c' },
+};
+
+export interface Activity {
+  id: string;
+  day_id: string;
+  position: number;
+  time: string | null;
+  title: string;
+  type: ActivityType;
+  area: string | null;
+  note: string | null;
+  map_url: string | null;
+  image_url: string | null;
+  halal: boolean;
+  book: boolean;
+  booked: boolean;
+  opt: boolean;
+}
+
+export interface Day {
+  id: string;
+  segment_id: string;
+  position: number;
+  date: string;
+  dow: string | null;
+  title: string | null;
+  note: string | null;
+  activities: Activity[];
+}
+
+export interface Segment {
+  id: string;
+  position: number;
+  code: string;
+  phase: string | null;
+  name: string;
+  jp: string | null;
+  date_start: string | null;
+  date_end: string | null;
+  nights: number;
+  travelers: number;
+  color: string;
+  stay: string | null;
+  stay_note: string | null;
+  climate: string | null;
+  mosque: string | null;
+  transit_icon: string | null;
+  transit_html: string | null;
+  /** Home / endpoint marker — shown on the route ribbon only. */
+  is_terminus: boolean;
+  days: Day[];
+}
+
+export interface ActivityInput {
+  time: string;
+  title: string;
+  type: ActivityType;
+  area: string;
+  note: string;
+  map_url: string;
+  image_url: string;
+  halal: boolean;
+  book: boolean;
+  opt: boolean;
+}

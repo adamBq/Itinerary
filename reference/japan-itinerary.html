@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan · Oct 29 – Nov 16</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  --paper:#E7E2D6;
+  --paper-2:#EFEBE1;
+  --card:#FBF9F3;
+  --ink:#16130E;
+  --ink-2:#4a463d;
+  --ink-3:#8a8375;
+  --rule:#cfc8b6;
+  --rule-2:#ddd6c4;
+  --red:#B23A2E;
+  --mapledark:#7c2419;
+  --gold:#C08A2D;
+  --shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 24px -12px rgba(30,20,10,.22);
+  --tokyo:#26415E;
+  --fuji:#B23A2E;
+  --kyoto:#B8802A;
+  --hiro:#2E6E6A;
+  --tokyo2:#6E3A55;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Zen Kaku Gothic New',system-ui,sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(178,58,46,.05), transparent 40%),
+    radial-gradient(circle at 0 100%, rgba(38,65,94,.05), transparent 40%);
+}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* ---------- Masthead ---------- */
+.masthead{
+  max-width:1080px;margin:0 auto;padding:34px 22px 10px;
+}
+.kicker{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--red);font-weight:700;display:flex;gap:12px;align-items:center;
+}
+.kicker::after{content:"";height:1px;flex:1;background:var(--rule)}
+h1.title{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(38px,7vw,74px);line-height:.94;letter-spacing:-.02em;margin:14px 0 6px;
+}
+h1.title .en{display:block}
+h1.title .jp{font-family:'Zen Kaku Gothic New';font-weight:700;font-size:.32em;letter-spacing:.08em;color:var(--ink-2);margin-top:10px}
+.subtitle{color:var(--ink-2);max-width:60ch;font-size:15px}
+.stats{display:flex;flex-wrap:wrap;gap:26px;margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.stat .n{font-family:'Bricolage Grotesque';font-weight:700;font-size:26px;line-height:1}
+.stat .l{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:5px}
+
+/* ---------- Route ribbon (signature) ---------- */
+.route{max-width:1080px;margin:22px auto 0;padding:0 22px}
+.route-inner{
+  background:var(--card);border:1px solid var(--rule);border-radius:14px;
+  padding:18px 20px;box-shadow:var(--shadow);position:relative;overflow-x:auto
+}
+.route-track{display:flex;align-items:flex-start;min-width:640px;position:relative}
+.stop{flex:1;position:relative;padding-top:26px;cursor:pointer;text-align:left;background:none;border:none;font:inherit;color:inherit}
+.stop .line{position:absolute;top:8px;left:0;right:0;height:4px;background:var(--sl,#ccc);border-radius:2px}
+.stop:first-child .line{left:11px;border-radius:0 2px 2px 0}
+.stop:last-child .line{right:calc(100% - 11px)}
+.stop .dot{position:absolute;top:2px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--paper);border:4px solid var(--sl,#ccc)}
+.stop .code{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--sl)}
+.stop .nm{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;margin-top:1px;line-height:1.1}
+.stop .dt{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-3);margin-top:3px}
+.stop .pax{display:inline-block;margin-top:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 6px;border-radius:20px;background:var(--sl);color:#fff}
+.stop:hover .nm{text-decoration:underline;text-underline-offset:2px}
+
+/* ---------- Toolbar ---------- */
+.toolbar{
+  position:sticky;top:0;z-index:40;background:rgba(231,226,214,.86);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);margin-top:26px
+}
+.toolbar-inner{max-width:1080px;margin:0 auto;padding:10px 22px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.flabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-right:2px}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+  border:1px solid var(--rule);background:var(--card);color:var(--ink-2);
+  padding:5px 10px;border-radius:20px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.12s
+}
+.chip .swatch{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip[aria-pressed="true"] .swatch{outline:2px solid var(--paper);outline-offset:-1px}
+.chip.muted{opacity:.4;text-decoration:line-through}
+.spacer{flex:1}
+.btn{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.04em;
+  border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+  padding:7px 12px;border-radius:8px;cursor:pointer;transition:.12s;white-space:nowrap
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--card)}
+.btn.red{background:var(--red);border-color:var(--red)}
+
+/* ---------- Segments ---------- */
+main{max-width:1080px;margin:0 auto;padding:8px 22px 80px}
+.segment{margin-top:34px;position:relative}
+.seg-head{
+  position:relative;border-left:4px solid var(--line);padding:2px 0 2px 22px;margin-bottom:8px
+}
+.seg-eyebrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.seg-code{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;letter-spacing:.16em;color:var(--line);background:color-mix(in srgb,var(--line) 12%,transparent);padding:3px 9px;border-radius:6px}
+.seg-phase{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.seg-pax{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#fff;background:var(--line);padding:3px 8px;border-radius:20px;letter-spacing:.04em}
+.seg-title{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(28px,4.5vw,42px);letter-spacing:-.02em;margin:6px 0 2px;line-height:1}
+.seg-title .jp{font-family:'Zen Kaku Gothic New';font-weight:700;font-size:.42em;color:var(--ink-3);margin-left:12px;letter-spacing:.06em}
+.seg-meta{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:12px;font-size:13px;color:var(--ink-2)}
+.seg-meta .mi{display:flex;gap:7px;align-items:flex-start;max-width:46ch}
+.seg-meta .mi b{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700;padding-top:2px;white-space:nowrap;min-width:64px}
+.seg-collapse{background:none;border:1px solid var(--rule);border-radius:7px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 9px;color:var(--ink-2);margin-left:auto}
+
+.transit-note{
+  display:flex;gap:12px;align-items:flex-start;
+  background:color-mix(in srgb,var(--line) 8%,var(--card));
+  border:1px dashed color-mix(in srgb,var(--line) 45%,var(--rule));
+  border-radius:10px;padding:11px 14px;margin:14px 0 4px 22px;font-size:13px;color:var(--ink-2)
+}
+.transit-note .ic{font-size:15px;line-height:1.3}
+.transit-note b{color:var(--ink);font-weight:700}
+
+/* ---------- Days & activities ---------- */
+.days{padding-left:22px;position:relative}
+.days::before{content:"";position:absolute;left:0;top:6px;bottom:20px;width:2px;background:linear-gradient(var(--line),color-mix(in srgb,var(--line) 25%,transparent));border-radius:2px}
+.day{position:relative;margin-top:16px}
+.day::before{content:"";position:absolute;left:-27px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:3px solid var(--line)}
+.day-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.day-date{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:var(--line)}
+.day-dow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.1em}
+.day-title{font-family:'Bricolage Grotesque';font-weight:700;font-size:17px;letter-spacing:-.01em}
+.day-note{width:100%;font-size:12.5px;color:var(--ink-3);font-style:italic;margin-top:-2px}
+
+.acts{display:flex;flex-direction:column;gap:8px}
+.act{
+  background:var(--card);border:1px solid var(--rule);border-radius:11px;
+  padding:11px 13px;display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:start;
+  box-shadow:var(--shadow);transition:.12s
+}
+.act:hover{border-color:color-mix(in srgb,var(--line) 40%,var(--rule))}
+.act-time{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;color:var(--ink);padding-top:1px}
+.act-time small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.act-body .an{font-weight:700;font-size:14.5px;line-height:1.25}
+.act-body .ameta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:5px}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;color:#fff}
+.area{font-size:11.5px;color:var(--ink-3);display:inline-flex;gap:3px;align-items:center}
+.badge{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:20px;border:1px solid;display:inline-flex;gap:3px;align-items:center}
+.badge.halal{color:#2b7a4b;border-color:#8fce9f;background:#eef8f0}
+.badge.book{color:#b06a00;border-color:#e6c88a;background:#fdf6e6}
+.badge.opt{color:#6a5aa0;border-color:#c3bbe6;background:#f2effa}
+.act-body .anote{font-size:12.5px;color:var(--ink-2);margin-top:6px;line-height:1.45}
+.act-body .amap{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tokyo);text-decoration:none;margin-top:6px;display:inline-flex;gap:4px;align-items:center;font-weight:500}
+.act-body .amap:hover{text-decoration:underline}
+.act-ctl{display:flex;flex-direction:column;gap:4px;align-items:center}
+.ib{width:26px;height:24px;border:1px solid var(--rule);background:var(--paper-2);border-radius:6px;cursor:pointer;font-size:12px;color:var(--ink-2);display:flex;align-items:center;justify-content:center;padding:0;line-height:1;transition:.1s}
+.ib:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ib:disabled{opacity:.3;cursor:default}
+.ib:disabled:hover{background:var(--paper-2);color:var(--ink-2);border-color:var(--rule)}
+.ib.del:hover{background:var(--red);border-color:var(--red)}
+
+.add-act{margin-top:10px;background:none;border:1.5px dashed var(--rule-2);color:var(--ink-3);border-radius:10px;padding:9px;width:100%;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;letter-spacing:.04em;transition:.12s}
+.add-act:hover{border-color:var(--line);color:var(--line);background:color-mix(in srgb,var(--line) 6%,transparent)}
+
+.add-day-row{padding-left:22px;margin-top:14px}
+.add-day{background:none;border:1px solid var(--rule);color:var(--ink-3);border-radius:8px;padding:7px 12px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em}
+.add-day:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ---------- Modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(22,19,14,.5);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto}
+.overlay.on{display:flex}
+.modal{background:var(--paper-2);border-radius:16px;max-width:520px;width:100%;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);border:1px solid var(--rule);overflow:hidden}
+.modal-head{padding:18px 20px 14px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center}
+.modal-head h3{font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;margin:0}
+.modal-head .x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-3);line-height:1}
+.modal-body{padding:18px 20px;display:grid;gap:14px}
+.field label{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin-bottom:5px}
+.field input[type=text],.field textarea,.field select{
+  width:100%;padding:9px 11px;border:1px solid var(--rule);border-radius:9px;background:var(--card);
+  font-family:'Zen Kaku Gothic New';font-size:14px;color:var(--ink);resize:vertical
+}
+.field input:focus,.field textarea:focus,.field select:focus{outline:2px solid color-mix(in srgb,var(--red) 50%,transparent);outline-offset:1px;border-color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checks{display:flex;gap:16px;flex-wrap:wrap}
+.check{display:flex;gap:7px;align-items:center;font-size:13px;cursor:pointer;font-weight:500}
+.check input{width:16px;height:16px;accent-color:var(--red)}
+.modal-foot{padding:14px 20px 18px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--rule)}
+
+/* checklist modal list */
+.ck-group{margin-bottom:16px}
+.ck-group h4{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;color:var(--gc)}
+.ck-item{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--rule)}
+.ck-item input{width:17px;height:17px;margin-top:1px;accent-color:var(--red)}
+.ck-item .ct{font-size:13.5px;font-weight:600}
+.ck-item .cd{font-size:11.5px;color:var(--ink-3)}
+.ck-empty{color:var(--ink-3);font-size:13px}
+
+footer{max-width:1080px;margin:0 auto;padding:24px 22px 60px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:12px}
+footer .mono{font-size:11px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:12px;opacity:0;transition:.25s;z-index:200;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:620px){
+  .act{grid-template-columns:48px 1fr}
+  .act-ctl{grid-column:1/-1;flex-direction:row;justify-content:flex-end;margin-top:2px}
+  .grid2{grid-template-columns:1fr}
+  .stat{min-width:70px}
+}
+
+@media print{
+  .toolbar,.route,.act-ctl,.add-act,.add-day-row,.seg-collapse,.stat.hideprint{display:none!important}
+  body{background:#fff}
+  .act,.route-inner{box-shadow:none}
+  .segment,.day,.act{break-inside:avoid}
+  a{color:var(--ink)!important}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="kicker">Itinerary · Autumn 2026 · 紅葉</div>
+  <h1 class="title">
+    <span class="en">Japan by Rail</span>
+    <span class="jp">東京 → 河口湖 → 京都 → 広島 → 東京</span>
+  </h1>
+  <p class="subtitle">Oct 29 – Nov 16. Five stops, two group sizes, one maple season. Everything below is editable — add, reorder, swap, or drop any stop, then export your version to keep it.</p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<nav class="route" aria-label="Route overview">
+  <div class="route-inner"><div class="route-track" id="routeTrack"></div></div>
+</nav>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="filters" id="filters"><span class="flabel">Show</span></div>
+    <span class="spacer"></span>
+    <button class="btn ghost" id="btnChecklist">✓ Bookings</button>
+    <button class="btn ghost" id="btnImport">↑ Import</button>
+    <button class="btn ghost" id="btnExport">↓ Export</button>
+    <button class="btn ghost" id="btnPrint">⎙ Print</button>
+    <button class="btn red" id="btnReset">↺ Reset</button>
+    <input type="file" id="fileInput" accept="application/json" hidden>
+  </div>
+</div>
+
+<main id="app"></main>
+
+<footer>
+  <div class="mono">BUILT FOR A GROUP OF 7 → 5 · HALAL-CONSCIOUS · MAPLE SEASON</div>
+  <p style="margin:10px 0 0;max-width:70ch">Halal spots are marked <b style="color:#2b7a4b">حلال</b> but always confirm certification on arrival — Japan's halal scene changes fast and cooking sake/mirin is the thing to ask about. Booking-required items (marked <b style="color:#b06a00">BOOK</b>) are collected under the Bookings button. Times are rough anchors, not fixed — drag your day around it.</p>
+</footer>
+
+<!-- Activity modal -->
+<div class="overlay" id="actOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="actModalTitle">
+    <div class="modal-head"><h3 id="actModalTitle">Add activity</h3><button class="x" data-close>×</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="f_segId"><input type="hidden" id="f_dayId"><input type="hidden" id="f_actId">
+      <div class="field"><label>What / where</label><input type="text" id="f_title" placeholder="e.g. Fushimi Inari early climb"></div>
+      <div class="grid2">
+        <div class="field"><label>Time</label><input type="text" id="f_time" placeholder="e.g. 8:00 or Morning"></div>
+        <div class="field"><label>Type</label><select id="f_type"></select></div>
+      </div>
+      <div class="field"><label>Area / district</label><input type="text" id="f_area" placeholder="e.g. Higashiyama"></div>
+      <div class="field"><label>Notes</label><textarea id="f_note" rows="2" placeholder="tips, alternatives, who's going…"></textarea></div>
+      <div class="field"><label>Map link (optional)</label><input type="text" id="f_map" placeholder="https://maps.google.com/…"></div>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="f_halal"> Halal spot</label>
+        <label class="check"><input type="checkbox" id="f_book"> Needs booking</label>
+        <label class="check"><input type="checkbox" id="f_opt"> Optional / swap</label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn" id="f_save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Checklist modal -->
+<div class="overlay" id="ckOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ckTitle">
+    <div class="modal-head"><h3 id="ckTitle">Book ahead</h3><button class="x" data-close>×</button></div>
+    <div class="modal-body" id="ckBody"></div>
+    <div class="modal-foot"><button class="btn" data-close>Done</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ TYPES ============ */
+const TYPES = {
+  sight:  {label:'Sight',   color:'#C0632D'},
+  food:   {label:'Food',    color:'#B23A2E'},
+  shop:   {label:'Shop',    color:'#8A6D2F'},
+  nature: {label:'Nature',  color:'#3E7A4E'},
+  culture:{label:'Culture', color:'#6E3A55'},
+  transit:{label:'Transit', color:'#3a3a3a'},
+  free:   {label:'Free',    color:'#5a7a8c'}
+};
+
+/* ============ DATA ============ */
+const uid = () => 'x'+Math.random().toString(36).slice(2,8);
+const M = 'https://www.google.com/maps/search/?api=1&query=';
+
+const INITIAL = {segments:[
+
+/* ---------------- TOKYO I ---------------- */
+{
+ id:'tokyo1', code:'TYO', phase:'Part 1 · arrival', name:'Tokyo', jp:'東京',
+ dateStart:'Oct 29', dateEnd:'Nov 4', nights:6, travelers:7, color:'var(--tokyo)',
+ stay:'Kaneda Apartment · 1-4-7 Misuji, Taito City',
+ stayNote:'5–10 min walk to Asakusa; Akihabara & Ueno one stop away',
+ climate:'Mild — 12–18°C days, cool evenings. Low rain.',
+ mosque:'Okachimachi Mosque (Ueno) · prayer rooms at Ueno & Tokyo stns',
+ transitIn:{ic:'✈',html:'<b>Arrive night of Oct 29.</b> Narita → Keisei Skyliner to Ueno (41 min) + Ginza line to Asakusa; or Haneda → Asakusa line direct (~50 min). Keep the first night light.'},
+ days:[
+  {id:uid(),date:'Oct 29',dow:'Wed',title:'Land & settle',note:'Tired-group mode: drop bags, eat close, sleep.',activities:[
+    {id:uid(),time:'Night',title:'Check in at Misuji apartment',type:'transit',area:'Asakusa',note:'Sort keys, luggage, tomorrow\'s plan.',map:M+'1-4-7+Misuji+Taito+Tokyo'},
+    {id:uid(),time:'Dinner',title:'Naritaya Halal Ramen (or Honolu Premier)',type:'food',area:'Asakusa',halal:true,note:'JIT-certified chicken-broth ramen, ~10 min walk near Senso-ji. Forgiving for 7 late arrivals.',map:M+'Naritaya+Halal+Ramen+Asakusa'}
+  ]},
+  {id:uid(),date:'Oct 30',dow:'Thu',title:'Asakusa · Kappabashi · Ryogoku',note:'Barely leaves the neighbourhood. Kappabashi is a cooking-nerd highlight.',activities:[
+    {id:uid(),time:'9:00',title:'Sensō-ji, Kaminarimon & Nakamise',type:'sight',area:'Asakusa',note:'Go early before Nakamise fills. Note: most street stalls aren\'t halal — save real meals for verified spots.',map:M+'Senso-ji+Temple'},
+    {id:uid(),time:'12:30',title:'Sushiken Asakusa (halal sushi)',type:'food',area:'Asakusa',halal:true,note:'Halal-certified since 2002, counter seating — split into 2 groups of 3–4. Alt: LUXE Burgers & Sunny\'s Table.',map:M+'Asakusa+Sushi+Ken'},
+    {id:uid(),time:'14:00',title:'Kappabashi Kitchen Town',type:'shop',area:'Kappabashi',note:'Pro knives, ceramics, plastic-food shops. 10 min from Asakusa — better than a Skytree queue.',map:M+'Kappabashi+Kitchen+Town'},
+    {id:uid(),time:'16:00',title:'Ryōgoku — sumo & Edo history',type:'culture',area:'Ryogoku',note:'Sumo Museum / Edo-Tokyo area. Check for a tournament or morning practice window. Easy to split the group here.',map:M+'Ryogoku+Sumo'},
+    {id:uid(),time:'19:00',title:'Sankyu Halal Japanese Food',type:'food',area:'Asakusa',halal:true,note:'Broad Japanese halal menu — good for sharing across 7.',map:M+'Sankyu+Halal+Asakusa'}
+  ]},
+  {id:uid(),date:'Oct 31',dow:'Fri',title:'Ueno · Akihabara',note:'',activities:[
+    {id:uid(),time:'9:30',title:'Ueno Park & Tokyo National Museum',type:'sight',area:'Ueno',note:'Swap museum for Ueno Zoo if the group prefers. Ameyoko market alongside for snacks.',map:M+'Ueno+Park'},
+    {id:uid(),time:'12:30',title:'Ameyoko Market browse + lunch',type:'shop',area:'Ueno',note:'Street food & bargain stalls under the tracks.',map:M+'Ameyoko'},
+    {id:uid(),time:'14:00',title:'Akihabara — electronics & arcades',type:'shop',area:'Akihabara',note:'Anime/gaming stores, retro games, arcades (GiGO, Super Potato). Let people split & regroup.',map:M+'Akihabara+Electric+Town'},
+    {id:uid(),time:'19:00',title:'Halal dinner near Okachimachi',type:'food',area:'Ueno',halal:true,note:'Real cluster of halal spots by the Okachimachi mosque.',map:M+'halal+restaurant+Okachimachi'}
+  ]},
+  {id:uid(),date:'Nov 1',dow:'Sat',title:'Shibuya · Harajuku · Shinjuku',note:'West-side classics. Expect Saturday crowds.',activities:[
+    {id:uid(),time:'9:00',title:'Meiji Shrine',type:'sight',area:'Harajuku',note:'Calm forest shrine — best before the Harajuku rush.',map:M+'Meiji+Shrine'},
+    {id:uid(),time:'11:00',title:'Takeshita Street, Harajuku',type:'shop',area:'Harajuku',note:'Youth fashion, crepes, chaos.',map:M+'Takeshita+Street'},
+    {id:uid(),time:'13:00',title:'Shibuya Crossing + Shibuya Sky',type:'sight',area:'Shibuya',book:true,note:'Book Shibuya Sky timed slot ahead for a group photo from above.',map:M+'Shibuya+Sky'},
+    {id:uid(),time:'18:00',title:'Omoide Yokocho + Shinjuku Tei dinner',type:'food',area:'Shinjuku',halal:true,note:'Wander the alley for atmosphere (much is pork/alcohol) then eat at Halal Wagyu Ramen Shinjuku Tei.',map:M+'Halal+Wagyu+Ramen+Shinjuku+Tei'}
+  ]},
+  {id:uid(),date:'Nov 2',dow:'Sun',title:'Tsukiji · Ginza · Odaiba',note:'',activities:[
+    {id:uid(),time:'8:30',title:'Tsukiji Outer Market breakfast',type:'food',area:'Tsukiji',note:'Seafood stalls & knives — check individual vendors for halal before eating.',map:M+'Tsukiji+Outer+Market'},
+    {id:uid(),time:'11:00',title:'Ginza stroll',type:'shop',area:'Ginza',note:'Flagship stores, Itoya stationery, Uniqlo/Muji flagships.',map:M+'Ginza'},
+    {id:uid(),time:'14:00',title:'teamLab Planets, Odaiba',type:'culture',area:'Odaiba',book:true,note:'BOOK NOW for 7 — timed group tickets sell out. Barefoot digital-art experience.',map:M+'teamLab+Planets+TOKYO'},
+    {id:uid(),time:'17:30',title:'Gundam statue + Rainbow Bridge',type:'sight',area:'Odaiba',note:'DiverCity life-size Gundam; bayside views at dusk.',map:M+'DiverCity+Tokyo+Plaza+Gundam'}
+  ]},
+  {id:uid(),date:'Nov 3',dow:'Mon',title:'Free day — gaming crawl or Kamakura',note:'Low-planning day before the travel day. Pick one.',activities:[
+    {id:uid(),time:'Option A',title:'Ikebukuro + Nakano Broadway gaming crawl',type:'free',area:'Ikebukuro / Nakano',note:'Pokémon Center Mega Tokyo, Round1/GiGO arcades, then Nakano Broadway for retro games & collectibles. Zero tickets, easy to split.',map:M+'Nakano+Broadway'},
+    {id:uid(),time:'Option B',title:'Kamakura day trip',type:'nature',area:'Kamakura',opt:true,note:'Great Buddha, temples, coast — ~1 hr each way. Better if the group wants scenery before Fuji.',map:M+'Kamakura'}
+  ]},
+  {id:uid(),date:'Nov 4',dow:'Tue',title:'Transfer to Kawaguchiko',note:'',activities:[
+    {id:uid(),time:'AM',title:'Pack, last Asakusa coffee, check out',type:'transit',area:'Asakusa',note:'Consider forwarding a bag ahead if not needed at the lake.'}
+  ]}
+ ]
+},
+
+/* ---------------- KAWAGUCHIKO ---------------- */
+{
+ id:'kawa', code:'KWG', phase:'Part 2 · Mt Fuji', name:'Kawaguchiko', jp:'河口湖',
+ dateStart:'Nov 4', dateEnd:'Nov 7', nights:3, travelers:7, color:'var(--fuji)',
+ stay:'Funatsu, north-shore side (35°29′27″N 138°46′09″E)',
+ stayNote:'~12–15 min walk south of Kawaguchiko Stn; close to the lake',
+ climate:'Cold mornings 2–6°C, days ~13–17°C. Dress warm for sunrise.',
+ mosque:'Fujikawaguchiko Masjid · Jumu\'ah ~12:45, halal café attached',
+ transitIn:{ic:'🚌',html:'<b>Tokyo → Kawaguchiko.</b> Highway bus Shinjuku → Kawaguchiko Stn (~1h45–2h), or JR Chūō → Ōtsuki → Fujikyū line. <b>Pick up the rental car</b> near arrival — it changes everything below (no 6pm last-bus problem).'},
+ days:[
+  {id:uid(),date:'Nov 4',dow:'Tue',title:'Arrive · Maple Corridor by night',note:'Momiji Festival runs all Nov; early = golden-to-red + illuminations.',activities:[
+    {id:uid(),time:'PM',title:'Check in, orient by the lake',type:'transit',area:'Funatsu',note:'Grab the car keys, settle in.'},
+    {id:uid(),time:'17:00',title:'Lake Kawaguchi Maple Corridor (lit)',type:'nature',area:'North shore',note:'Illuminated from ~4:30pm to 9:30–10pm. With the car you can stay late — no last-bus rush.',map:M+'Lake+Kawaguchi+Maple+Corridor'},
+    {id:uid(),time:'19:30',title:'IDATEN BETTEI Honten',type:'food',area:'Funatsu',halal:true,note:'Halal-certified wagyu sushi / tempura / ramen courses, prayer room on site. ~12 min walk. Reserve for 7.',map:M+'IDATEN+BETTEI+Honten'}
+  ]},
+  {id:uid(),date:'Nov 5',dow:'Wed',title:'Fuji viewpoints loop',note:'Clear Fuji is likeliest 6–9am before cloud builds.',activities:[
+    {id:uid(),time:'6:30',title:'Sunrise Fuji from the lakeshore',type:'nature',area:'North shore',opt:true,note:'If skies are clear, step out early. With the car you can relocate to Oishi Park for a cleaner angle.',map:M+'Oishi+Park+Kawaguchiko'},
+    {id:uid(),time:'9:00',title:'Chureito Pagoda',type:'sight',area:'Fujiyoshida',note:'The classic pagoda + Fuji shot. Arrive early to beat tour groups; ~400 steps. Parking ~¥1,000–1,500.',map:M+'Chureito+Pagoda'},
+    {id:uid(),time:'12:00',title:'Oshino Hakkai + lunch',type:'nature',area:'Oshino',note:'Crystal spring-fed ponds village. Food stalls (mochi, grilled corn).',map:M+'Oshino+Hakkai'},
+    {id:uid(),time:'15:00',title:'Mt Fuji Panoramic Ropeway + Oishi Park',type:'sight',area:'North shore',note:'Late afternoon = shorter queues, golden hour. Oishi Park for the postcard Fuji-over-lake view.',map:M+'Mt+Fuji+Panoramic+Ropeway'},
+    {id:uid(),time:'19:00',title:'Aladdin Indo Restaurant & Kebab House',type:'food',area:'Funatsu',halal:true,note:'Halal, lakeside outdoor seating. Well-priced kebabs & curry.',map:M+'Aladdin+Indo+Restaurant+Kebab+Kawaguchiko'}
+  ]},
+  {id:uid(),date:'Nov 6',dow:'Thu',title:'Fuji Five Lakes drive',note:'The day the car earns its keep.',activities:[
+    {id:uid(),time:'9:30',title:'Saiko Iyashi-no-Sato Nenba',type:'culture',area:'Lake Saiko',note:'Rebuilt Edo thatched-roof village; pottery workshops, Fuji backdrop.',map:M+'Saiko+Iyashi+no+Sato+Nenba'},
+    {id:uid(),time:'12:45',title:'Jumu\'ah at Fujikawaguchiko Masjid',type:'culture',area:'Funatsu',halal:true,opt:true,note:'Friday prayer ~12:45; halal café next door for lunch. Skip if not needed.',map:M+'Fujikawaguchiko+Masjid'},
+    {id:uid(),time:'14:30',title:'Narusawa Ice Cave / Fugaku Wind Cave',type:'nature',area:'Aokigahara edge',note:'Lava caves in the forest — short, cold, fun.',map:M+'Narusawa+Ice+Cave'},
+    {id:uid(),time:'16:00',title:'Lake Motosu (¥1000-note view)',type:'nature',area:'West lakes',note:'The Fuji view on the old ¥1,000 note. Golden-hour drive back.',map:M+'Lake+Motosu'},
+    {id:uid(),time:'19:00',title:'HOUTO LABO — halal hōtō',type:'food',area:'Kawaguchiko',halal:true,note:'Local hearty miso hotpot noodles, halal. Good one to try.',map:M+'HOTO+LABO+Kawaguchiko'}
+  ]},
+  {id:uid(),date:'Nov 7',dow:'Fri',title:'Return car · onward to Kyoto',note:'',activities:[
+    {id:uid(),time:'AM',title:'Last Fuji check, pack, return rental',type:'transit',area:'Kawaguchiko',note:'Fuel up & return the car near the station.'}
+  ]}
+ ]
+},
+
+/* ---------------- KYOTO ---------------- */
+{
+ id:'kyoto', code:'KIX', phase:'Part 3 · Kansai · group of 5', name:'Kyoto', jp:'京都',
+ dateStart:'Nov 7', dateEnd:'Nov 11', nights:4, travelers:5, color:'var(--kyoto)',
+ stay:'Nishikiyamachi-dōri Gojō, Shimogyo-ku (Kiyamachi / Kamo River)',
+ stayNote:'Central — walk to Gion, Nishiki & Kyoto Stn area; riverside',
+ climate:'Like Tokyo — 11–18°C, peak autumn colour building through Nov.',
+ mosque:'Kyoto Camii (near Kyoto Stn) · Al Rashid Mosque on Kiyamachi (near you)',
+ transitIn:{ic:'🚄',html:'<b>Kawaguchiko → Kyoto (2 people peel off, now 5).</b> Bus/train to Mishima Stn (~1.5h), then Shinkansen Mishima → Kyoto (~2h15). Budget a half-day. Forwarding luggage ahead makes it painless.'},
+ days:[
+  {id:uid(),date:'Nov 7',dow:'Fri',title:'Arrive · Kamo River & Gion evening',note:'',activities:[
+    {id:uid(),time:'PM',title:'Check in, walk Kiyamachi & the Kamo River',type:'transit',area:'Shimogyo',note:'Your street is lined with canals & lantern-lit bars — stroll north into Gion.',map:M+'Kiyamachi+dori+Kyoto'},
+    {id:uid(),time:'19:00',title:'GYUMON — halal wagyu yakiniku & ramen',type:'food',area:'Gion-Higashiyama',halal:true,note:'Grill premium wagyu tableside; social for a group of 5. Alt: Shinjukutei Gion (halal wagyu ramen).',map:M+'GYUMON+Gion+halal+wagyu'}
+  ]},
+  {id:uid(),date:'Nov 8',dow:'Sat',title:'Higashiyama — the temple run',note:'Front-load Fushimi Inari before the crowds.',activities:[
+    {id:uid(),time:'7:00',title:'Fushimi Inari Taisha (early)',type:'sight',area:'Fushimi',note:'Thousands of vermilion torii. Before 7:30 it\'s nearly empty; take the right-hand path up.',map:M+'Fushimi+Inari+Taisha'},
+    {id:uid(),time:'10:30',title:'Kiyomizu-dera + Ninenzaka/Sannenzaka',type:'sight',area:'Higashiyama',note:'Hilltop temple & preserved lanes of shops and tea houses.',map:M+'Kiyomizu-dera'},
+    {id:uid(),time:'14:00',title:'Gion & Hanamikoji',type:'culture',area:'Gion',note:'Machiya streets, geisha district. Be respectful on the private lanes.',map:M+'Gion+Hanamikoji'},
+    {id:uid(),time:'16:00',title:'Nishiki Market',type:'food',area:'Nakagyo',note:'"Kyoto\'s kitchen" — sample stalls (confirm halal per item). Bring cash.',map:M+'Nishiki+Market'},
+    {id:uid(),time:'19:00',title:'Halal yakiniku / ramen dinner',type:'food',area:'Central',halal:true,note:'Yakiniku Ichimaru (Gion) or back to a halal ramen spot.',map:M+'Yakiniku+Ichimaru+Gion+halal'}
+  ]},
+  {id:uid(),date:'Nov 9',dow:'Sun',title:'Osaka day trip',note:'~15 min by Shinkansen or ~40 min rapid train from Kyoto.',activities:[
+    {id:uid(),time:'9:30',title:'Osaka Castle & park',type:'sight',area:'Chuo, Osaka',note:'Interior is a modern museum; grounds & views are the draw.',map:M+'Osaka+Castle'},
+    {id:uid(),time:'13:00',title:'Dōtonbori & Namba',type:'sight',area:'Namba, Osaka',note:'Glico sign, canal, street-food theatre. Shinsekai/Tsutenkaku nearby if time.',map:M+'Dotonbori'},
+    {id:uid(),time:'18:00',title:'Tsuki no Odori — halal izakaya',type:'food',area:'Nishi, Osaka',halal:true,note:'One of Japan\'s few halal-certified izakayas — yakitori, karaage, hot pot.',map:M+'Tsuki+no+Odori+halal+Osaka'}
+  ]},
+  {id:uid(),date:'Nov 10',dow:'Mon',title:'Arashiyama + NW Kyoto',note:'Swap this whole day for the Hiroshima trip below if you\'d rather do Hiroshima now (recommended).',activities:[
+    {id:uid(),time:'8:00',title:'Arashiyama Bamboo Grove (early)',type:'nature',area:'Arashiyama',note:'Go before 8:30 or it\'s wall-to-wall. Tenryū-ji garden alongside.',map:M+'Arashiyama+Bamboo+Grove'},
+    {id:uid(),time:'11:00',title:'Kinkaku-ji (Golden Pavilion)',type:'sight',area:'Kita',note:'Gold-leaf temple over a reflecting pond — stunning with autumn colour.',map:M+'Kinkaku-ji'},
+    {id:uid(),time:'14:00',title:'Optional: Hiroshima round-trip instead',type:'transit',area:'—',opt:true,note:'RECOMMENDED SWAP: do Hiroshima today as a round trip from Kyoto (leave luggage here), then Nov 11 is a clean, relaxed Kyoto → Tokyo day. See the Hiroshima stop for details.',map:''}
+  ]},
+  {id:uid(),date:'Nov 11',dow:'Tue',title:'Depart Kyoto',note:'See the Hiroshima stop for the two routing options.',activities:[
+    {id:uid(),time:'AM',title:'Check out · forward luggage to Shinjuku',type:'transit',area:'Kyoto Stn',note:'Takkyūbin your bags ahead to the Tokyo Part 2 stay so the Hiroshima detour is hands-free.',map:''}
+  ]}
+ ]
+},
+
+/* ---------------- HIROSHIMA ---------------- */
+{
+ id:'hiro', code:'HIJ', phase:'Nov 11 · day trip — decide the routing', name:'Hiroshima', jp:'広島',
+ dateStart:'Nov 11', dateEnd:'Nov 11', nights:0, travelers:5, color:'var(--hiro)',
+ stay:'No overnight — day trip only',
+ stayNote:'Coin lockers at Hiroshima Stn for day bags',
+ climate:'Coastal & mild, ~13–18°C.',
+ mosque:'Hiroshima Muslim community near the university; limited halal downtown',
+ transitIn:{ic:'⚠',html:'<b>The honest read:</b> Kyoto → Hiroshima is ~1h40; Hiroshima → Tokyo is ~4h. Doing both on Nov 11 = ~6h of Shinkansen backtracking past Kyoto, with luggage, around a heavy museum — a ~14h day, and Miyajima won\'t fit. <b>Cleaner:</b> do this as a round-trip from Kyoto on Nov 10 (Miyajima fits), then a normal Kyoto → Tokyo run on the 11th. Both options are below — keep one, delete the other.'},
+ days:[
+  {id:uid(),date:'Option 1',dow:'On the 11th',title:'Hiroshima → straight to Tokyo (long day)',note:'Peace Park only; heavy but doable if you\'re set on this shape.',activities:[
+    {id:uid(),time:'~7:00',title:'Early Nozomi: Kyoto → Hiroshima',type:'transit',area:'Shinkansen',note:'~1h40. Stash day bags in Hiroshima Stn lockers (main luggage already forwarded).',map:''},
+    {id:uid(),time:'9:30',title:'Peace Memorial Park & Museum',type:'culture',area:'Naka, Hiroshima',note:'A-Bomb Dome, Cenotaph, Museum. Give it 2.5–3h — it deserves the time and it\'s sobering.',map:M+'Hiroshima+Peace+Memorial+Park'},
+    {id:uid(),time:'13:30',title:'Okonomiyaki lunch (Hiroshima-style)',type:'food',area:'Downtown',note:'Confirm halal/ingredients individually — options are limited downtown.',map:M+'Hiroshima+okonomiyaki'},
+    {id:uid(),time:'15:00',title:'Nozomi: Hiroshima → Tokyo',type:'transit',area:'Shinkansen',note:'~4h. Arrive Shinjuku ~8–9pm. Bags already at the hotel.',map:''}
+  ]},
+  {id:uid(),date:'Option 1b',dow:'Same day, fly instead',title:'Hiroshima → Tokyo by air (comparison)',note:'Checked: door-to-door this is a wash vs the train — Hiroshima Airport is ~50 min outside the city, which eats the flight-time saving. Worth it mainly if fares are genuinely cheap for the group.',activities:[
+    {id:uid(),time:'13:45',title:'Streetcar/taxi to city, then limousine bus to HIJ',type:'transit',area:'Hiroshima',note:'~50 min bus to the airport, add buffer for traffic. Bus stop is outside Arrivals, 1st floor.',map:''},
+    {id:uid(),time:'~15:30',title:'Check-in + security, HIJ',type:'transit',area:'Hiroshima Airport',note:'Domestic — arrive ~40 min before boarding. JAL/ANA run ~14–15 flights/day to Haneda.',map:''},
+    {id:uid(),time:'~16:30',title:'Flight HIJ → HND',type:'transit',area:'In flight',note:'1h15–1h40 in the air. ~¥ varies a lot, sometimes cheaper than Shinkansen if booked early; sometimes not.',map:''},
+    {id:uid(),time:'~18:00',title:'Haneda → Shinjuku',type:'transit',area:'Tokyo',note:'Keikyu + JR, or airport limousine bus — ~40–45 min. Compare to Tokyo Stn → Shinjuku (~15 min) on the train option.',map:''}
+  ]},
+  {id:uid(),date:'Option 2',dow:'Best — on Nov 10',title:'Hiroshima round-trip from Kyoto (recommended)',note:'Delete this OR Option 1. If you keep this, Nov 11 becomes a simple Kyoto → Tokyo day.',activities:[
+    {id:uid(),time:'6:45',title:'Nozomi: Kyoto → Hiroshima',type:'transit',area:'Shinkansen',note:'~1h40. No luggage — you\'re coming back to Kyoto tonight.',map:''},
+    {id:uid(),time:'9:00',title:'Peace Memorial Park & Museum',type:'culture',area:'Naka, Hiroshima',note:'Full unhurried visit.',map:M+'Hiroshima+Peace+Memorial+Park'},
+    {id:uid(),time:'12:30',title:'Ferry to Miyajima · Itsukushima Shrine',type:'sight',area:'Miyajima',note:'Floating torii gate, wild deer, island walks. The reason to do this version.',map:M+'Itsukushima+Shrine+Miyajima'},
+    {id:uid(),time:'17:30',title:'Nozomi back to Kyoto',type:'transit',area:'Shinkansen',note:'Sleep in your own Kyoto bed; travel clean to Tokyo tomorrow.',map:''}
+  ]}
+ ]
+},
+
+/* ---------------- TOKYO II ---------------- */
+{
+ id:'tokyo2', code:'SJK', phase:'Part 4 · group of 5', name:'Tokyo — Shinjuku', jp:'新宿',
+ dateStart:'Nov 11', dateEnd:'Nov 16', nights:5, travelers:5, color:'var(--tokyo2)',
+ stay:'Shinjuku, near the 24/7 Don Quijote (Kabukichō)',
+ stayNote:'Nightlife & transit hub; Shinjuku Stn is Tokyo\'s spine',
+ climate:'Mild, 11–17°C. Autumn colour peaks mid–late Nov in the parks.',
+ mosque:'Tokyo Camii (Yoyogi-Uehara) — grand mosque + halal market; Jumu\'ah',
+ transitIn:{ic:'🏙',html:'<b>Arrive Shinjuku Nov 11</b> (from Hiroshima ~8–9pm, or a relaxed Kyoto run if you took Option 2). Bags should already be here via takkyūbin.'},
+ days:[
+  {id:uid(),date:'Nov 11',dow:'Tue',title:'Land in Shinjuku',note:'Keep it easy after the travel day.',activities:[
+    {id:uid(),time:'Night',title:'Check in + Kabukichō / Omoide Yokocho walk',type:'sight',area:'Shinjuku',note:'Neon, Golden Gai alleys, Godzilla head. Atmosphere heavy on pork/alcohol — scout before eating.',map:M+'Kabukicho+Shinjuku'},
+    {id:uid(),time:'Late',title:'Halal Wagyu Ramen Shinjuku Tei',type:'food',area:'Shinjuku',halal:true,note:'Reliable halal ramen right in the area.',map:M+'Halal+Wagyu+Ramen+Shinjuku+Tei'}
+  ]},
+  {id:uid(),date:'Nov 12',dow:'Wed',title:'Catch-up + Tokyo Camii',note:'Mop up anything missed from Part 1.',activities:[
+    {id:uid(),time:'10:00',title:'Shinjuku Gyoen (autumn colour)',type:'nature',area:'Shinjuku',note:'One of Tokyo\'s best gardens; mid-Nov leaves turning.',map:M+'Shinjuku+Gyoen'},
+    {id:uid(),time:'13:00',title:'Tokyo Camii + halal market',type:'culture',area:'Yoyogi-Uehara',halal:true,note:'Turkey\'s grand mosque in Tokyo; halal grocery on the ground floor.',map:M+'Tokyo+Camii'},
+    {id:uid(),time:'15:00',title:'teamLab (if you skipped it in Part 1)',type:'culture',area:'—',book:true,opt:true,note:'Only if missed earlier — book ahead.',map:M+'teamLab+Tokyo'}
+  ]},
+  {id:uid(),date:'Nov 13',dow:'Thu',title:'Day trip — Nikkō or Hakone',note:'Pick one; both are big autumn-leaf payoffs.',activities:[
+    {id:uid(),time:'Option A',title:'Nikkō — shrines & waterfalls',type:'nature',area:'Tochigi',note:'~2h out. Tōshō-gū, Kegon Falls, Lake Chūzenji — prime koyo territory in mid-Nov.',map:M+'Nikko+Toshogu'},
+    {id:uid(),time:'Option B',title:'Hakone loop',type:'nature',area:'Hakone',opt:true,note:'Ropeway, Ōwakudani, lake pirate ship, Fuji views from the other side. Onsen town.',map:M+'Hakone'}
+  ]},
+  {id:uid(),date:'Nov 14',dow:'Fri',title:'Shopping + Jumu\'ah',note:'',activities:[
+    {id:uid(),time:'12:30',title:'Jumu\'ah at Tokyo Camii',type:'culture',area:'Yoyogi-Uehara',halal:true,opt:true,note:'Friday prayer if you want it.',map:M+'Tokyo+Camii'},
+    {id:uid(),time:'14:00',title:'Nakano Broadway — film cameras & retro',type:'shop',area:'Nakano',note:'Fujiya Camera & the Broadway stalls for used film gear and collectibles — worth a dedicated hunt.',map:M+'Fujiya+Camera+Nakano'},
+    {id:uid(),time:'17:00',title:'Shibuya / Ginza flagships',type:'shop',area:'Shibuya',note:'Whatever\'s left on the shopping list.',map:M+'Shibuya'}
+  ]},
+  {id:uid(),date:'Nov 15',dow:'Sat',title:'Flex day + pack',note:'Favourites revisited, souvenirs, last meals.',activities:[
+    {id:uid(),time:'Day',title:'Open — revisit a favourite or Akihabara round 2',type:'free',area:'—',note:'Buffer for anything the group loved or missed. Souvenir sweep + repack.',map:''},
+    {id:uid(),time:'Evening',title:'Farewell halal dinner',type:'food',area:'Shinjuku',halal:true,note:'Send the trip off properly.',map:M+'halal+restaurant+Shinjuku'}
+  ]},
+  {id:uid(),date:'Nov 16',dow:'Sun',title:'Departure',note:'',activities:[
+    {id:uid(),time:'—',title:'Airport transfer & fly out',type:'transit',area:'NRT / HND',note:'Narita: Skyliner/N\'EX from Shinjuku. Haneda: direct trains. Leave buffer for a group of 5.',map:''}
+  ]}
+ ]
+}
+
+]};
+
+/* ============ STATE ============ */
+let trip = structuredClone(INITIAL);
+const activeTypes = new Set(Object.keys(TYPES));
+
+/* ============ RENDER ============ */
+const app = document.getElementById('app');
+
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function renderStats(){
+  const days = trip.segments.reduce((a,s)=>a+s.days.length,0);
+  const acts = trip.segments.reduce((a,s)=>a+s.days.reduce((b,d)=>b+d.activities.length,0),0);
+  const nights = trip.segments.reduce((a,s)=>a+(s.nights||0),0);
+  const el = document.getElementById('stats');
+  el.innerHTML = [
+    ['5','Stops'],[String(nights),'Nights'],[String(days),'Days planned'],[String(acts),'Activities'],['7→5','Travellers'],['حلال','Diet-aware']
+  ].map(([n,l],i)=>`<div class="stat${i>3?' hideprint':''}"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+}
+
+function renderRoute(){
+  const t = document.getElementById('routeTrack');
+  t.innerHTML = trip.segments.map(s=>`
+    <button class="stop" style="--sl:${s.color}" data-jump="${s.id}">
+      <span class="line"></span><span class="dot"></span>
+      <span class="code">${esc(s.code)}</span>
+      <span class="nm">${esc(s.name)}</span>
+      <span class="dt">${esc(s.dateStart)}–${esc(s.dateEnd)}</span>
+      <span class="pax">${s.travelers} pax</span>
+    </button>`).join('');
+}
+
+function renderFilters(){
+  const f = document.getElementById('filters');
+  f.querySelectorAll('.chip').forEach(c=>c.remove());
+  Object.entries(TYPES).forEach(([k,v])=>{
+    const b=document.createElement('button');
+    b.className='chip'+(activeTypes.has(k)?'':' muted');
+    b.style.setProperty('--c',v.color);
+    b.setAttribute('aria-pressed',activeTypes.has(k));
+    b.dataset.filter=k;
+    b.innerHTML=`<span class="swatch"></span>${v.label}`;
+    f.appendChild(b);
+  });
+}
+
+function activityHTML(segId,dayId,a,idx,total){
+  const ty=TYPES[a.type]||TYPES.free;
+  const hidden=!activeTypes.has(a.type);
+  const badges=[
+    a.halal?'<span class="badge halal">حلال halal</span>':'',
+    a.book?'<span class="badge book">◷ book</span>':'',
+    a.opt?'<span class="badge opt">⇄ optional</span>':''
+  ].join('');
+  const map=a.map?`<a class="amap" href="${esc(a.map)}" target="_blank" rel="noopener">◎ map ↗</a>`:'';
+  const time=a.time||'';
+  return `<div class="act" data-act="${a.id}" data-type="${a.type}" style="${hidden?'display:none':''}">
+    <div class="act-time">${esc(time)}</div>
+    <div class="act-body">
+      <div class="an">${esc(a.title)}</div>
+      <div class="ameta">
+        <span class="tag" style="background:${ty.color}">${ty.label}</span>
+        ${a.area?`<span class="area">◍ ${esc(a.area)}</span>`:''}
+        ${badges}
+      </div>
+      ${a.note?`<div class="anote">${esc(a.note)}</div>`:''}
+      ${map}
+    </div>
+    <div class="act-ctl">
+      <button class="ib" title="Move up" data-mv="up" data-seg="${segId}" data-day="${dayId}" data-i="${idx}" ${idx===0?'disabled':''}>▲</button>
+      <button class="ib" title="Move down" data-mv="down" data-seg="${segId}" data-day="${dayId}" data-i="${idx}" ${idx===total-1?'disabled':''}>▼</button>
+      <button class="ib" title="Edit" data-edit data-seg="${segId}" data-day="${dayId}" data-act="${a.id}">✎</button>
+      <button class="ib del" title="Delete" data-del data-seg="${segId}" data-day="${dayId}" data-act="${a.id}">✕</button>
+    </div>
+  </div>`;
+}
+
+function dayHTML(segId,d){
+  const acts=d.activities.map((a,i)=>activityHTML(segId,d.id,a,i,d.activities.length)).join('');
+  return `<div class="day" data-day="${d.id}">
+    <div class="day-head">
+      <span class="day-date">${esc(d.date)}</span>
+      <span class="day-dow">${esc(d.dow||'')}</span>
+      <span class="day-title">${esc(d.title)}</span>
+      ${d.note?`<span class="day-note">${esc(d.note)}</span>`:''}
+    </div>
+    <div class="acts">${acts}</div>
+    <button class="add-act" data-add data-seg="${segId}" data-day="${d.id}">+ Add activity to ${esc(d.date)}</button>
+  </div>`;
+}
+
+function segmentHTML(s){
+  const meta=[
+    ['Stay',s.stay+(s.stayNote?` — ${s.stayNote}`:'')],
+    ['Weather',s.climate],
+    ['Prayer',s.mosque]
+  ].map(([k,v])=>`<div class="mi"><b>${k}</b><span>${esc(v)}</span></div>`).join('');
+  const tn=s.transitIn?`<div class="transit-note"><span class="ic">${s.transitIn.ic}</span><div>${s.transitIn.html}</div></div>`:'';
+  const days=s.days.map(d=>dayHTML(s.id,d)).join('');
+  return `<section class="segment" id="${s.id}" style="--line:${s.color}">
+    <div class="seg-head">
+      <div class="seg-eyebrow">
+        <span class="seg-code">${esc(s.code)}</span>
+        <span class="seg-phase">${esc(s.phase)}</span>
+        <span class="seg-pax">${s.travelers} travelling</span>
+        <button class="seg-collapse" data-collapse="${s.id}">– collapse</button>
+      </div>
+      <h2 class="seg-title">${esc(s.name)}<span class="jp">${esc(s.jp)}</span></h2>
+      <div class="seg-meta">${meta}</div>
+    </div>
+    ${tn}
+    <div class="seg-body">
+      <div class="days">${days}</div>
+      <div class="add-day-row"><button class="add-day" data-addday="${s.id}">+ Add a day to ${esc(s.name)}</button></div>
+    </div>
+  </section>`;
+}
+
+function render(){
+  renderStats(); renderRoute(); renderFilters();
+  app.innerHTML = trip.segments.map(segmentHTML).join('');
+}
+render();
+
+/* ============ HELPERS ============ */
+const find=(segId,dayId,actId)=>{
+  const seg=trip.segments.find(s=>s.id===segId);
+  const day=seg&&seg.days.find(d=>d.id===dayId);
+  const act=day&&actId&&day.activities.find(a=>a.id===actId);
+  return {seg,day,act};
+};
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1800);
+}
+
+/* ============ EVENTS: itinerary ============ */
+app.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.mv){
+    const {seg,day}=find(t.dataset.seg,t.dataset.day);
+    const i=+t.dataset.i, arr=day.activities, j=t.dataset.mv==='up'?i-1:i+1;
+    if(j<0||j>=arr.length)return;
+    [arr[i],arr[j]]=[arr[j],arr[i]];render();return;
+  }
+  if(t.hasAttribute('data-del')){
+    const {day}=find(t.dataset.seg,t.dataset.day);
+    if(confirm('Delete this activity?')){
+      day.activities=day.activities.filter(a=>a.id!==t.dataset.act);render();toast('Deleted');
+    }return;
+  }
+  if(t.hasAttribute('data-edit')){openAct(t.dataset.seg,t.dataset.day,t.dataset.act);return;}
+  if(t.hasAttribute('data-add')){openAct(t.dataset.seg,t.dataset.day,null);return;}
+  if(t.dataset.addday){
+    const seg=trip.segments.find(s=>s.id===t.dataset.addday);
+    seg.days.push({id:uid(),date:'New day',dow:'',title:'Untitled',note:'',activities:[]});
+    render();
+    const el=document.getElementById(seg.id);el&&el.scrollIntoView({block:'end'});
+    toast('Day added — edit its first activity to fill it out');return;
+  }
+  if(t.dataset.collapse){
+    const sec=document.getElementById(t.dataset.collapse);
+    const body=sec.querySelector('.seg-body');
+    const hidden=body.style.display==='none';
+    body.style.display=hidden?'':'none';
+    t.textContent=hidden?'– collapse':'+ expand';return;
+  }
+  if(t.dataset.jump){
+    document.getElementById(t.dataset.jump).scrollIntoView({behavior:'smooth',block:'start'});return;
+  }
+});
+
+document.getElementById('filters').addEventListener('click',e=>{
+  const c=e.target.closest('.chip');if(!c)return;
+  const k=c.dataset.filter;
+  activeTypes.has(k)?activeTypes.delete(k):activeTypes.add(k);
+  renderFilters();
+  document.querySelectorAll('.act').forEach(a=>{
+    a.style.display=activeTypes.has(a.dataset.type)?'':'none';
+  });
+});
+
+/* ============ ACTIVITY MODAL ============ */
+const ov=document.getElementById('actOverlay');
+const $=id=>document.getElementById(id);
+function openAct(segId,dayId,actId){
+  const {act}=find(segId,dayId,actId);
+  $('actModalTitle').textContent=actId?'Edit activity':'Add activity';
+  $('f_segId').value=segId;$('f_dayId').value=dayId;$('f_actId').value=actId||'';
+  const sel=$('f_type');sel.innerHTML=Object.entries(TYPES).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+  $('f_title').value=act?act.title:'';
+  $('f_time').value=act?(act.time||''):'';
+  $('f_type').value=act?act.type:'sight';
+  $('f_area').value=act?(act.area||''):'';
+  $('f_note').value=act?(act.note||''):'';
+  $('f_map').value=act?(act.map||''):'';
+  $('f_halal').checked=!!(act&&act.halal);
+  $('f_book').checked=!!(act&&act.book);
+  $('f_opt').checked=!!(act&&act.opt);
+  ov.classList.add('on');setTimeout(()=>$('f_title').focus(),50);
+}
+$('f_save').addEventListener('click',()=>{
+  const segId=$('f_segId').value,dayId=$('f_dayId').value,actId=$('f_actId').value;
+  const title=$('f_title').value.trim();
+  if(!title){$('f_title').focus();return;}
+  const data={
+    time:$('f_time').value.trim(),title,type:$('f_type').value,
+    area:$('f_area').value.trim(),note:$('f_note').value.trim(),map:$('f_map').value.trim(),
+    halal:$('f_halal').checked,book:$('f_book').checked,opt:$('f_opt').checked
+  };
+  const {day,act}=find(segId,dayId,actId);
+  if(act){Object.assign(act,data);toast('Saved');}
+  else{day.activities.push({id:uid(),...data});toast('Added');}
+  closeModals();render();
+});
+
+/* ============ CHECKLIST ============ */
+document.getElementById('btnChecklist').addEventListener('click',()=>{
+  const body=document.getElementById('ckBody');
+  const groups=trip.segments.map(s=>{
+    const items=[];
+    s.days.forEach(d=>d.activities.forEach(a=>{if(a.book)items.push({d,a});}));
+    return items.length?{s,items}:null;
+  }).filter(Boolean);
+  if(!groups.length){body.innerHTML='<p class="ck-empty">Nothing flagged to book yet. Tick "Needs booking" on an activity and it\'ll show up here.</p>';}
+  else{
+    body.innerHTML=groups.map(g=>`<div class="ck-group" style="--gc:${g.s.color}">
+      <h4>${esc(g.s.name)}</h4>
+      ${g.items.map(({d,a})=>`<label class="ck-item"><input type="checkbox">
+        <span><span class="ct">${esc(a.title)}</span><br><span class="cd">${esc(d.date)} · ${esc(a.area||'')}</span></span>
+      </label>`).join('')}
+    </div>`).join('');
+  }
+  document.getElementById('ckOverlay').classList.add('on');
+});
+
+/* ============ EXPORT / IMPORT / PRINT / RESET ============ */
+document.getElementById('btnExport').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(trip,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download='japan-itinerary.json';a.click();URL.revokeObjectURL(url);
+  toast('Exported japan-itinerary.json');
+});
+document.getElementById('btnImport').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{try{const data=JSON.parse(r.result);
+    if(!data.segments)throw 0;trip=data;render();toast('Itinerary imported');
+  }catch(err){toast('That file didn\'t look like an itinerary export');}};
+  r.readAsText(file);e.target.value='';
+});
+document.getElementById('btnPrint').addEventListener('click',()=>window.print());
+document.getElementById('btnReset').addEventListener('click',()=>{
+  if(confirm('Reset to the original plan? Your edits in this session will be lost (export first to keep them).')){
+    trip=structuredClone(INITIAL);activeTypes.clear();Object.keys(TYPES).forEach(k=>activeTypes.add(k));render();toast('Reset to original');
+  }
+});
+
+/* ============ MODAL CLOSE ============ */
+function closeModals(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('on'));}
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o||e.target.hasAttribute('data-close'))closeModals();});
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals();});
+</script>
+</body>
+</html>
