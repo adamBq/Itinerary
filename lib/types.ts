@@ -7,14 +7,16 @@ export type ActivityType =
   | 'transit'
   | 'free';
 
+// Tag colors carry white text at very small sizes — every value here is
+// tuned to keep ≥4.5:1 contrast against #fff.
 export const TYPES: Record<ActivityType, { label: string; color: string }> = {
-  sight: { label: 'Sight', color: '#C0632D' },
+  sight: { label: 'Sight', color: '#A8511C' },
   food: { label: 'Food', color: '#B23A2E' },
-  shop: { label: 'Shop', color: '#8A6D2F' },
-  nature: { label: 'Nature', color: '#3E7A4E' },
+  shop: { label: 'Shop', color: '#77601F' },
+  nature: { label: 'Nature', color: '#376F46' },
   culture: { label: 'Culture', color: '#6E3A55' },
-  transit: { label: 'Transit', color: '#3a3a3a' },
-  free: { label: 'Free', color: '#5a7a8c' },
+  transit: { label: 'Transit', color: '#3A3C3F' },
+  free: { label: 'Free', color: '#49677A' },
 };
 
 export interface Activity {

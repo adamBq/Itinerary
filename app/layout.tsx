@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 import {
-  Bricolage_Grotesque,
+  Barlow_Condensed,
   Zen_Kaku_Gothic_New,
-  JetBrains_Mono,
+  IBM_Plex_Mono,
 } from 'next/font/google';
 import './globals.css';
 
-const bricolage = Bricolage_Grotesque({
-  variable: '--font-bricolage',
+const display = Barlow_Condensed({
+  variable: '--font-display',
   subsets: ['latin'],
-  weight: ['600', '700', '800'],
+  weight: ['500', '600', '700'],
 });
 
 const zen = Zen_Kaku_Gothic_New({
@@ -18,10 +18,10 @@ const zen = Zen_Kaku_Gothic_New({
   weight: ['400', '500', '700'],
 });
 
-const mono = JetBrains_Mono({
+const mono = IBM_Plex_Mono({
   variable: '--font-mono',
   subsets: ['latin'],
-  weight: ['400', '500', '700'],
+  weight: ['400', '500', '600'],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${zen.variable} ${mono.variable}`}
+      className={`${display.variable} ${zen.variable} ${mono.variable}`}
     >
       <body>{children}</body>
     </html>
