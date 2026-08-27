@@ -1,70 +1,85 @@
-import { supabase } from './supabase';
+'use server';
+
+import { sql } from './db';
 import type { Activity, ActivityInput, Day, Segment } from './types';
 
+// These run on the server (Next.js Server Actions) and are the only code that
+// touches the database. The client in components/TripApp.tsx imports and calls
+// them like normal async functions; Next.js turns each call into a POST.
+
 export async function fetchTrip(): Promise<Segment[]> {
-  const { data, error } = await supabase
-    .from('segments')
-    .select('*, days(*, activities(*))')
-    .order('position')
-    .order('position', { referencedTable: 'days' })
-    .order('position', { referencedTable: 'days.activities' });
-  if (error) throw error;
-  return (data ?? []) as Segment[];
+  // Three flat, ordered reads, then assembled into the segments→days→activities
+  // tree in JS. Simpler and cheaper than a nested join for a dataset this size.
+  const [segments, days, activities] = (await Promise.all([
+    sql`select * from segments order by position`,
+    sql`select * from days order by position`,
+    sql`select * from activities order by position`,
+  ])) as unknown as [Segment[], Day[], Activity[]];
+
+  const actsByDay = new Map<string, Activity[]>();
+  for (const a of activities) {
+    (actsByDay.get(a.day_id) ?? actsByDay.set(a.day_id, []).get(a.day_id)!).push(
+      a
+    );
+  }
+
+  const daysBySegment = new Map<string, Day[]>();
+  for (const d of days) {
+    d.activities = actsByDay.get(d.id) ?? [];
+    (
+      daysBySegment.get(d.segment_id) ??
+      daysBySegment.set(d.segment_id, []).get(d.segment_id)!
+    ).push(d);
+  }
+
+  for (const s of segments) s.days = daysBySegment.get(s.id) ?? [];
+  return segments;
 }
 
-export async function insertActivity(day: Day, input: ActivityInput) {
-  const position =
-    day.activities.reduce((m, a) => Math.max(m, a.position), -1) + 1;
-  const { error } = await supabase
-    .from('activities')
-    .insert({ day_id: day.id, position, ...input });
-  if (error) throw error;
+export async function insertActivity(dayId: string, input: ActivityInput) {
+  await sql`
+    insert into activities
+      (day_id, position, time, title, type, area, note, map_url, image_url, halal, book, opt)
+    values (
+      ${dayId},
+      (select coalesce(max(position), -1) + 1 from activities where day_id = ${dayId}),
+      ${input.time}, ${input.title}, ${input.type}, ${input.area}, ${input.note},
+      ${input.map_url}, ${input.image_url}, ${input.halal}, ${input.book}, ${input.opt}
+    )`;
 }
 
 export async function updateActivity(id: string, input: ActivityInput) {
-  const { error } = await supabase
-    .from('activities')
-    .update({ ...input, updated_at: new Date().toISOString() })
-    .eq('id', id);
-  if (error) throw error;
+  await sql`
+    update activities set
+      time = ${input.time}, title = ${input.title}, type = ${input.type},
+      area = ${input.area}, note = ${input.note}, map_url = ${input.map_url},
+      image_url = ${input.image_url}, halal = ${input.halal}, book = ${input.book},
+      opt = ${input.opt}, updated_at = now()
+    where id = ${id}`;
 }
 
 export async function deleteActivity(id: string) {
-  const { error } = await supabase.from('activities').delete().eq('id', id);
-  if (error) throw error;
+  await sql`delete from activities where id = ${id}`;
 }
 
 export async function swapActivities(a: Activity, b: Activity) {
-  const r1 = await supabase
-    .from('activities')
-    .update({ position: b.position })
-    .eq('id', a.id);
-  if (r1.error) throw r1.error;
-  const r2 = await supabase
-    .from('activities')
-    .update({ position: a.position })
-    .eq('id', b.id);
-  if (r2.error) throw r2.error;
+  // Both writes in one HTTP transaction so positions can never end up crossed.
+  await sql.transaction([
+    sql`update activities set position = ${b.position} where id = ${a.id}`,
+    sql`update activities set position = ${a.position} where id = ${b.id}`,
+  ]);
 }
 
-export async function insertDay(segment: Segment) {
-  const position =
-    segment.days.reduce((m, d) => Math.max(m, d.position), -1) + 1;
-  const { error } = await supabase.from('days').insert({
-    segment_id: segment.id,
-    position,
-    date: 'New day',
-    dow: '',
-    title: 'Untitled',
-    note: '',
-  });
-  if (error) throw error;
+export async function insertDay(segmentId: string) {
+  await sql`
+    insert into days (segment_id, position, date, dow, title, note)
+    values (
+      ${segmentId},
+      (select coalesce(max(position), -1) + 1 from days where segment_id = ${segmentId}),
+      'New day', '', 'Untitled', ''
+    )`;
 }
 
 export async function setBooked(id: string, booked: boolean) {
-  const { error } = await supabase
-    .from('activities')
-    .update({ booked })
-    .eq('id', id);
-  if (error) throw error;
+  await sql`update activities set booked = ${booked} where id = ${id}`;
 }

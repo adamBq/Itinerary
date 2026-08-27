@@ -7,7 +7,6 @@ import Toolbar from './Toolbar';
 import Segment from './Segment';
 import ActivityModal from './ActivityModal';
 import BookingsModal from './BookingsModal';
-import { supabase } from '@/lib/supabase';
 import * as api from '@/lib/trip';
 import {
   TYPES,
@@ -51,9 +50,10 @@ export default function TripApp() {
     }
   }, []);
 
-  // Initial fetch, plus realtime: any change from anyone triggers one debounced
-  // refetch. That refetch is the whole reconciliation model — no client-side
-  // merging, for our own edits or anyone else's.
+  // Initial fetch, plus a refetch whenever the tab regains focus. Neon has no
+  // realtime channel, so instead of pushing changes we re-pull on focus — that
+  // reconciles edits made from another device/tab the next time you look at
+  // this one. A single debounced refetch is the whole reconciliation model.
   useEffect(() => {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
@@ -80,21 +80,18 @@ export default function TripApp() {
       clearTimeout(timer);
       timer = setTimeout(fetchNow, 150);
     };
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') refetch();
+    };
 
-    const channel = supabase.channel('trip-changes');
-    for (const table of ['segments', 'days', 'activities']) {
-      channel.on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table },
-        refetch
-      );
-    }
-    channel.subscribe();
+    window.addEventListener('focus', refetch);
+    document.addEventListener('visibilitychange', onVisible);
 
     return () => {
       cancelled = true;
       clearTimeout(timer);
-      supabase.removeChannel(channel);
+      window.removeEventListener('focus', refetch);
+      document.removeEventListener('visibilitychange', onVisible);
     };
   }, []);
 
@@ -138,10 +135,13 @@ export default function TripApp() {
         'Saved'
       );
     } else {
-      // The insert's generated id arrives with the realtime refetch.
+      // The insert's generated id arrives with the refetch that persist runs.
       mutate(
         (segs) => segs,
-        () => api.insertActivity(m.day, input),
+        async () => {
+          await api.insertActivity(m.day.id, input);
+          await load();
+        },
         'Added'
       );
     }
@@ -188,7 +188,10 @@ export default function TripApp() {
   function addDay(segment: SegmentT) {
     mutate(
       (segs) => segs,
-      () => api.insertDay(segment),
+      async () => {
+        await api.insertDay(segment.id);
+        await load();
+      },
       'Day added'
     );
   }
