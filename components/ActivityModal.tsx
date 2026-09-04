@@ -12,6 +12,10 @@ interface Props {
   activity: Activity | null;
   onSave: (input: ActivityInput) => void;
   onClose: () => void;
+  // 'place' reuses this form for the "Places to go" list: it hides the
+  // schedule-only fields (time / needs-booking / optional) that only make
+  // sense once a place is pinned to a day.
+  variant?: 'activity' | 'place';
 }
 
 const blank: ActivityInput = {
@@ -44,9 +48,16 @@ function initialForm(activity: Activity | null): ActivityInput {
   };
 }
 
-export default function ActivityModal({ activity, onSave, onClose }: Props) {
+export default function ActivityModal({
+  activity,
+  onSave,
+  onClose,
+  variant = 'activity',
+}: Props) {
   const [form, setForm] = useState<ActivityInput>(() => initialForm(activity));
   const [previewOk, setPreviewOk] = useState(true);
+  const isPlace = variant === 'place';
+  const noun = isPlace ? 'place' : 'activity';
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -69,7 +80,9 @@ export default function ActivityModal({ activity, onSave, onClose }: Props) {
     >
       <div className="modal" role="dialog" aria-modal="true">
         <div className="modal-head">
-          <h3>{activity ? 'Edit activity' : 'Add activity'}</h3>
+          <h3>
+            {activity ? 'Edit' : 'Add'} {noun}
+          </h3>
           <button className="x" onClick={onClose} aria-label="Close">
             ×
           </button>
@@ -88,17 +101,19 @@ export default function ActivityModal({ activity, onSave, onClose }: Props) {
             />
           </div>
 
-          <div className="grid2">
-            <div className="field">
-              <label htmlFor="f_time">Time</label>
-              <input
-                id="f_time"
-                type="text"
-                value={form.time}
-                placeholder="e.g. 8:00 or Morning"
-                onChange={(e) => set('time', e.target.value)}
-              />
-            </div>
+          <div className={isPlace ? undefined : 'grid2'}>
+            {!isPlace && (
+              <div className="field">
+                <label htmlFor="f_time">Time</label>
+                <input
+                  id="f_time"
+                  type="text"
+                  value={form.time}
+                  placeholder="e.g. 8:00 or Morning"
+                  onChange={(e) => set('time', e.target.value)}
+                />
+              </div>
+            )}
             <div className="field">
               <label htmlFor="f_type">Type</label>
               <select
@@ -181,22 +196,26 @@ export default function ActivityModal({ activity, onSave, onClose }: Props) {
               />{' '}
               Halal spot
             </label>
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={form.book}
-                onChange={(e) => set('book', e.target.checked)}
-              />{' '}
-              Needs booking
-            </label>
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={form.opt}
-                onChange={(e) => set('opt', e.target.checked)}
-              />{' '}
-              Optional / swap
-            </label>
+            {!isPlace && (
+              <>
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={form.book}
+                    onChange={(e) => set('book', e.target.checked)}
+                  />{' '}
+                  Needs booking
+                </label>
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={form.opt}
+                    onChange={(e) => set('opt', e.target.checked)}
+                  />{' '}
+                  Optional / swap
+                </label>
+              </>
+            )}
           </div>
         </div>
 

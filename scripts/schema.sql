@@ -50,3 +50,19 @@ create table if not exists activities (
   opt boolean not null default false,
   updated_at timestamptz not null default now()
 );
+
+-- Places to go: a staging list of spots to (maybe) fold into the itinerary
+-- later. Mirrors the place-relevant activity columns so a row maps straight
+-- onto an activity when promoted (see lib/places.ts addPlaceToItinerary).
+create table if not exists places (
+  id uuid primary key default gen_random_uuid(),
+  position int not null,
+  title text not null,
+  type text not null default 'sight',
+  area text,
+  note text,
+  map_url text,
+  image_url text,
+  halal boolean not null default false,
+  created_at timestamptz not null default now()
+);

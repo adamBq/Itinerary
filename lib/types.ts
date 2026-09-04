@@ -82,3 +82,28 @@ export interface ActivityInput {
   book: boolean;
   opt: boolean;
 }
+
+// "Places to go" — a place someone wants to visit, not yet scheduled. Fields
+// mirror an Activity minus the schedule-only ones (time/book/opt) so a place
+// maps directly onto an ActivityInput when promoted into the itinerary.
+export interface Place {
+  id: string;
+  position: number;
+  title: string;
+  type: ActivityType;
+  area: string | null;
+  note: string | null;
+  map_url: string | null;
+  image_url: string | null;
+  halal: boolean;
+}
+
+export interface PlaceInput {
+  title: string;
+  type: ActivityType;
+  area: string;
+  note: string;
+  map_url: string;
+  image_url: string;
+  halal: boolean;
+}

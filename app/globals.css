@@ -344,3 +344,61 @@ footer .mono{font-size:11px;letter-spacing:.08em}
   .seg-pax,.seg-code{color:var(--line);border-color:var(--line)}
   .day-date{background:#fff;color:var(--line);border:1.5px solid var(--line)}
 }
+
+/* ---------- View tabs (Itinerary / Places to go) ---------- */
+.viewtabs{max-width:1080px;margin:22px auto 0;padding:0 22px}
+.viewtabs-inner{display:flex;gap:4px;border-bottom:2px solid var(--ink)}
+.viewtab{
+  font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:.01em;
+  background:none;border:none;cursor:pointer;color:var(--ink-3);
+  padding:8px 16px 10px;position:relative;top:2px;
+  display:inline-flex;align-items:center;gap:8px;border-radius:8px 8px 0 0;transition:.12s
+}
+.viewtab:hover{color:var(--ink-2)}
+.viewtab.on{color:var(--ink);background:var(--card);border:2px solid var(--ink);border-bottom-color:var(--card)}
+.viewtab-count{
+  font-family:var(--font-mono);font-size:10px;font-weight:600;
+  background:var(--ink);color:#fff;border-radius:20px;padding:1px 7px;line-height:1.5
+}
+.viewtab.on .viewtab-count{background:var(--red)}
+
+/* ---------- Places to go ---------- */
+.places-wrap{--line:var(--ink-3);margin-top:6px}
+.places-head{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--rule);margin-bottom:14px
+}
+.places-head .flabel{color:var(--ink-3)}
+.places-head .chip{border-color:var(--rule);color:var(--ink-2)}
+.places-head .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.places{display:flex;flex-direction:column;gap:8px}
+/* No time column here — a place isn't scheduled yet. */
+.places .act{grid-template-columns:56px 1fr auto}
+.places .act-detail{grid-column:2/-1}
+/* Add-to-trip is the whole point of this view, so keep controls visible. */
+.places .act-ctl{opacity:1}
+.addtrip{padding:5px 10px}
+.places-empty{
+  text-align:center;padding:56px 22px;color:var(--ink-3);
+  display:flex;flex-direction:column;align-items:center;gap:10px
+}
+.places-empty p{margin:0;max-width:46ch}
+.places-empty .mono{font-size:12px}
+.places-empty .btn{margin-top:6px}
+
+/* ---------- Day picker (promote a place onto a day) ---------- */
+.daypick-empty{color:var(--ink-3);font-family:var(--font-mono);font-size:12px;margin:0}
+.daypick-seg + .daypick-seg{margin-top:14px}
+.daypick-seg-name{
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:6px
+}
+.dayrow{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  background:var(--paper-2);border:1px solid var(--rule);border-radius:8px;
+  padding:9px 12px;cursor:pointer;transition:.12s;margin-bottom:6px
+}
+.dayrow:hover{border-color:var(--ink);background:var(--card)}
+.dayrow-date{font-size:12px;font-weight:600;color:var(--ink-2);min-width:64px}
+.dayrow-title{flex:1;font-weight:600;font-size:14px}
+.dayrow-go{color:var(--ink-3);font-size:15px}

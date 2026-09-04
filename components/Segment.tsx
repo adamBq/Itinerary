@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type CSSProperties } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import Day from './Day';
 import type {
   Activity,
@@ -38,8 +38,28 @@ export default function Segment({
   const [collapsed, setCollapsed] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
 
-  const meta: [string, string][] = [
-    ['Stay', s.stay + (s.stay_note ? ` — ${s.stay_note}` : '')],
+  // stay_note doubles as either a free-text note or a Google Maps link. When
+  // it's a URL, render it as a "map ↗" link like activity cards do; otherwise
+  // keep appending it as descriptive text.
+  const stayIsLink = /^https?:\/\//.test(s.stay_note ?? '');
+  const stayValue: ReactNode = stayIsLink ? (
+    <>
+      {s.stay}{' '}
+      <a
+        className="amap"
+        href={s.stay_note!}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ◎ map ↗
+      </a>
+    </>
+  ) : (
+    s.stay + (s.stay_note ? ` — ${s.stay_note}` : '')
+  );
+
+  const meta: [string, ReactNode][] = [
+    ['Stay', stayValue],
     ['Weather', s.climate ?? ''],
     ['Prayer', s.mosque ?? ''],
   ];

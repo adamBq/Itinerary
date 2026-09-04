@@ -7,13 +7,19 @@ import Toolbar from './Toolbar';
 import Segment from './Segment';
 import ActivityModal from './ActivityModal';
 import BookingsModal from './BookingsModal';
+import ViewTabs, { type View } from './ViewTabs';
+import PlacesView from './PlacesView';
+import DayPickerModal from './DayPickerModal';
 import * as api from '@/lib/trip';
+import * as placesApi from '@/lib/places';
 import {
   TYPES,
   type Activity,
   type ActivityInput,
   type ActivityType,
   type Day,
+  type Place,
+  type PlaceInput,
   type Segment as SegmentT,
 } from '@/lib/types';
 
@@ -22,13 +28,22 @@ type ModalState =
   | { mode: 'edit'; day: Day; activity: Activity }
   | null;
 
+type PlaceModalState =
+  | { mode: 'add' }
+  | { mode: 'edit'; place: Place }
+  | null;
+
 export default function TripApp() {
   const [segments, setSegments] = useState<SegmentT[] | null>(null);
+  const [places, setPlaces] = useState<Place[]>([]);
+  const [view, setView] = useState<View>('itinerary');
   const [error, setError] = useState<string | null>(null);
   const [activeTypes, setActiveTypes] = useState<Set<ActivityType>>(
     () => new Set(Object.keys(TYPES) as ActivityType[])
   );
   const [modal, setModal] = useState<ModalState>(null);
+  const [placeModal, setPlaceModal] = useState<PlaceModalState>(null);
+  const [promoting, setPromoting] = useState<Place | null>(null);
   const [bookingsOpen, setBookingsOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -43,7 +58,12 @@ export default function TripApp() {
 
   const load = useCallback(async () => {
     try {
-      setSegments(await api.fetchTrip());
+      const [trip, pl] = await Promise.all([
+        api.fetchTrip(),
+        placesApi.fetchPlaces(),
+      ]);
+      setSegments(trip);
+      setPlaces(pl);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not load the itinerary.');
@@ -60,9 +80,13 @@ export default function TripApp() {
 
     const fetchNow = async () => {
       try {
-        const data = await api.fetchTrip();
+        const [data, pl] = await Promise.all([
+          api.fetchTrip(),
+          placesApi.fetchPlaces(),
+        ]);
         if (!cancelled) {
           setSegments(data);
+          setPlaces(pl);
           setError(null);
         }
       } catch (e) {
@@ -210,6 +234,97 @@ export default function TripApp() {
     );
   }
 
+  // Same optimistic pattern as `mutate`, but over the flat places array.
+  const mutatePlaces = useCallback(
+    async (
+      optimistic: (p: Place[]) => Place[],
+      persist: () => Promise<void>,
+      okMsg?: string
+    ) => {
+      setPlaces((p) => optimistic(structuredClone(p)));
+      try {
+        await persist();
+        if (okMsg) toast(okMsg);
+      } catch (e) {
+        console.error(e);
+        toast("Couldn't save — reloading");
+        load();
+      }
+    },
+    [load, toast]
+  );
+
+  function savePlace(input: PlaceInput) {
+    const m = placeModal;
+    if (!m) return;
+    setPlaceModal(null);
+
+    if (m.mode === 'edit') {
+      const id = m.place.id;
+      mutatePlaces(
+        (arr) => {
+          const p = arr.find((x) => x.id === id);
+          if (p) Object.assign(p, input);
+          return arr;
+        },
+        () => placesApi.updatePlace(id, input),
+        'Saved'
+      );
+    } else {
+      // The insert's generated id arrives with the refetch that persist runs.
+      mutatePlaces(
+        (arr) => arr,
+        async () => {
+          await placesApi.insertPlace(input);
+          await load();
+        },
+        'Added'
+      );
+    }
+  }
+
+  function deletePlace(place: Place) {
+    if (!confirm('Delete this place?')) return;
+    mutatePlaces(
+      (arr) => arr.filter((x) => x.id !== place.id),
+      () => placesApi.deletePlace(place.id),
+      'Deleted'
+    );
+  }
+
+  function movePlace(index: number, dir: 'up' | 'down') {
+    const j = dir === 'up' ? index - 1 : index + 1;
+    if (j < 0 || j >= places.length) return;
+    const a = places[index];
+    const b = places[j];
+    mutatePlaces(
+      (arr) => {
+        [arr[index], arr[j]] = [arr[j], arr[index]];
+        [arr[index].position, arr[j].position] = [
+          arr[j].position,
+          arr[index].position,
+        ];
+        return arr;
+      },
+      () => placesApi.swapPlaces(a, b)
+    );
+  }
+
+  function addPlaceToDay(dayId: string) {
+    const place = promoting;
+    if (!place) return;
+    setPromoting(null);
+    // Both the new activity and the removed place come back on the refetch.
+    mutatePlaces(
+      (arr) => arr.filter((x) => x.id !== place.id),
+      async () => {
+        await placesApi.addPlaceToItinerary(place.id, dayId);
+        await load();
+      },
+      'Added to trip'
+    );
+  }
+
   function toggleType(t: ActivityType) {
     setActiveTypes((prev) => {
       const next = new Set(prev);
@@ -234,33 +349,50 @@ export default function TripApp() {
   return (
     <>
       <Masthead segments={segments} />
-      <RouteRibbon segments={segments} />
-      <Toolbar
-        segments={segments}
-        activeTypes={activeTypes}
-        onToggleType={toggleType}
-        onOpenBookings={() => setBookingsOpen(true)}
-      />
+      <ViewTabs view={view} onChange={setView} placesCount={places.length} />
 
-      <main>
-        {/* Terminus rows (home) exist only to close the route ribbon. */}
-        {segments
-          .filter((s) => !s.is_terminus)
-          .map((s) => (
-            <Segment
-              key={s.id}
-              segment={s}
-              activeTypes={activeTypes}
-              onAddDay={addDay}
-              onAddActivity={(day) => setModal({ mode: 'add', day })}
-              onEditActivity={(day, activity) =>
-                setModal({ mode: 'edit', day, activity })
-              }
-              onDeleteActivity={deleteActivity}
-              onMoveActivity={moveActivity}
-            />
-          ))}
-      </main>
+      {view === 'itinerary' ? (
+        <>
+          <RouteRibbon segments={segments} />
+          <Toolbar
+            segments={segments}
+            activeTypes={activeTypes}
+            onToggleType={toggleType}
+            onOpenBookings={() => setBookingsOpen(true)}
+          />
+
+          <main>
+            {/* Terminus rows (home) exist only to close the route ribbon. */}
+            {segments
+              .filter((s) => !s.is_terminus)
+              .map((s) => (
+                <Segment
+                  key={s.id}
+                  segment={s}
+                  activeTypes={activeTypes}
+                  onAddDay={addDay}
+                  onAddActivity={(day) => setModal({ mode: 'add', day })}
+                  onEditActivity={(day, activity) =>
+                    setModal({ mode: 'edit', day, activity })
+                  }
+                  onDeleteActivity={deleteActivity}
+                  onMoveActivity={moveActivity}
+                />
+              ))}
+          </main>
+        </>
+      ) : (
+        <main>
+          <PlacesView
+            places={places}
+            onAdd={() => setPlaceModal({ mode: 'add' })}
+            onEdit={(place) => setPlaceModal({ mode: 'edit', place })}
+            onDelete={deletePlace}
+            onMove={movePlace}
+            onAddToTrip={(place) => setPromoting(place)}
+          />
+        </main>
+      )}
 
       <footer>
         <div className="mono">
@@ -279,6 +411,40 @@ export default function TripApp() {
           activity={modal.mode === 'edit' ? modal.activity : null}
           onSave={saveActivity}
           onClose={() => setModal(null)}
+        />
+      )}
+
+      {placeModal && (
+        <ActivityModal
+          key={
+            placeModal.mode === 'edit' ? placeModal.place.id : 'add-place'
+          }
+          variant="place"
+          activity={
+            placeModal.mode === 'edit'
+              ? // ActivityModal only reads shared fields; the schedule-only
+                // ones it ignores in place mode are filled with blanks.
+                ({
+                  ...placeModal.place,
+                  time: '',
+                  book: false,
+                  booked: false,
+                  opt: false,
+                  day_id: '',
+                } as Activity)
+              : null
+          }
+          onSave={(input) => savePlace(input)}
+          onClose={() => setPlaceModal(null)}
+        />
+      )}
+
+      {promoting && (
+        <DayPickerModal
+          place={promoting}
+          segments={segments}
+          onPick={addPlaceToDay}
+          onClose={() => setPromoting(null)}
         />
       )}
 
